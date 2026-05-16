@@ -1,0 +1,71 @@
+@model MediCarePlus.Models.LoginViewModel
+@{ ViewData["Title"] = "Đăng nhập"; ViewData["ActivePage"] = "Login"; }
+
+<section class="page-hero">
+    <div class="container">
+        <p class="tag">Tài khoản</p>
+        <h1>Đăng Nhập</h1>
+        <p class="sub">Đăng nhập để đặt lịch và theo dõi lịch khám của bạn</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container" style="max-width:480px">
+
+        @if (TempData["LoginRequired"] != null)
+        {
+            <div style="background:#FEF3C7;border:1px solid #FCD34D;border-radius:14px;padding:20px;text-align:center;margin-bottom:24px">
+                <div style="font-size:28px;margin-bottom:8px">&#128274;</div>
+                <h3 style="color:#92400E;margin-bottom:8px;font-size:17px">Yêu cầu đăng nhập</h3>
+                <p style="color:#92400E;font-size:14px;margin-bottom:14px">@TempData["LoginRequired"]</p>
+                <a asp-controller="Account" asp-action="Register" class="btn btn-outline btn-sm">Đăng ký miễn phí</a>
+            </div>
+        }
+
+        @if (TempData["Success"] != null)
+        {
+            <div style="background:#D1FAE5;border:1px solid #6EE7B7;border-radius:14px;padding:18px;margin-bottom:24px;display:flex;gap:12px;align-items:flex-start">
+                <span style="font-size:22px">&#9989;</span>
+                <p style="color:#065F46;font-size:14px;margin:0">@TempData["Success"]</p>
+            </div>
+        }
+
+        <div class="form-card">
+            <h2 style="font-size:22px;margin-bottom:28px;text-align:center">Chào mừng trở lại! &#128075;</h2>
+
+            <form asp-controller="Account" asp-action="Login" method="post">
+                @Html.AntiForgeryToken()
+
+                @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ContainsKey(""))
+                {
+                    <div style="background:#FEE2E2;border-radius:10px;padding:14px;margin-bottom:20px;color:#DC2626;font-size:14px;font-weight:600">
+                        @Html.ValidationSummary(true)
+                    </div>
+                }
+
+                <div class="form-group">
+                    <label class="form-label">Email <span class="req">*</span></label>
+                    <input asp-for="Email" class="form-control" placeholder="example@gmail.com" autocomplete="email"/>
+                    <span asp-validation-for="Email" class="invalid-feedback"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Mật Khẩu <span class="req">*</span></label>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" autocomplete="current-password"/>
+                    <span asp-validation-for="Password" class="invalid-feedback"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" style="padding:15px;font-size:16px;margin-top:8px">Đăng nhập</button>
+
+                <p style="text-align:center;margin-top:20px;color:var(--gray);font-size:14px">
+                    Chưa có tài khoản?
+                    <a asp-controller="Account" asp-action="Register" style="color:var(--primary);font-weight:700">Đăng ký ngay</a>
+                </p>
+            </form>
+
+           
+        </div>
+    </div>
+</section>
+
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); } }

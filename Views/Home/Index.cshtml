@@ -1,0 +1,246 @@
+@{
+    ViewData["Title"]      = "Trang chủ";
+    ViewData["ActivePage"] = "Home";
+    var doctors  = ViewBag.Doctors  as List<MediCarePlus.Models.Doctor>;
+    var services = ViewBag.Services as List<(string Title, string Desc, string Bg, string IconColor, string MediaUrl)>;
+}
+
+<!-- HERO với video nền -->
+<section style="position:relative;overflow:hidden;padding:80px 24px;background:#0C3D5E;min-height:520px;display:flex;align-items:center">
+    <video autoplay muted loop playsinline
+           style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:3;z-index:0">
+        <source src="/videos/hero-bg.mp4" type="video/mp4">
+    </video>
+    <div style="position:absolute;top:0;left:0;width:100%;height:100%;
+                background:linear-gradient(135deg,rgba(12,61,94,0.9) 0%,rgba(26,82,118,0.8) 100%);z-index:1"></div>
+    <div class="container hero-grid" style="position:relative;z-index:2;width:100%">
+        <div>
+            <div class="hero-badge">
+                <div class="pulse-dot"></div>
+                Đang tiếp nhận bệnh nhân &bull; Thứ 2 &ndash; Chủ Nhật
+            </div>
+            <h1><span class="hero-accent">Chăm Sóc Sức Khỏe</span><br /> <span class="hero-accent">Toàn Diện</span><br /><span class="hero-accent">Cho Gia Đình Bạn</span><br \ /></h1>
+            <p class="hero-desc">Hơn 50 bác sĩ chuyên khoa giàu kinh nghiệm, trang thiết bị y tế hiện đại chuẩn quốc tế, mang đến dịch vụ khám chữa bệnh đáng tin cậy nhất TPHCM.</p>
+            <div class="hero-btns">
+                <a asp-controller="Booking" asp-action="Index" class="btn btn-white btn-lg">Đặt Lịch Khám Ngay</a>
+                <a asp-controller="Doctors" asp-action="Index" class="btn btn-ghost btn-lg">Xem Đội Ngũ Bác Sĩ</a>
+            </div>
+            <div class="hero-stats">
+                @foreach (var s in new[] { ("200k+","Bệnh nhân"),("50+","Bác sĩ"),("15+","Năm KN"),("98%","Hài lòng") })
+                {
+                    <div>
+                        <div class="hero-stat-val">@s.Item1</div>
+                        <div class="hero-stat-lbl">@s.Item2</div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-circle-outer">
+                <div class="hero-circle-inner">
+                    <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
+                        <rect x="44" y="10" width="22" height="90" rx="8" fill="rgba(255,255,255,0.95)"/>
+                        <rect x="10" y="44" width="90" height="22" rx="8" fill="rgba(255,255,255,0.95)"/>
+                        <circle cx="55" cy="55" r="16" fill="rgba(14,165,233,0.7)"/>
+                    </svg>
+                </div>
+                <div class="hero-float-card top">
+                    <div class="float-label">Bệnh nhân hôm nay</div>
+                    <div class="float-value">148</div>
+                    <div class="float-sub">&#9650; 12% so hôm qua</div>
+                </div>
+                <div class="hero-float-card bot">
+                    <div class="float-label">Đánh giá trung bình</div>
+                    <div style="font-size:20px;font-weight:900;color:#F59E0B">&#9733; 4.9 / 5</div>
+                    <div class="float-label">Dựa trên 1,543 đánh giá</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- QUICK BAR -->
+<div class="quick-bar">
+    <div class="quick-bar-inner">
+        @foreach (var item in new[] { ("📞","Hotline","028 3456 7890"),("🕐","Giờ khám","07:00 – 20:00 (Cả tuần)"),("📍","Địa chỉ","123 Nguyễn Văn Linh, Q.7, TPHCM") })
+        {
+            <div class="quick-item">
+                <span class="quick-item-icon">@item.Item1</span>
+                <div>
+                    <div class="quick-item-label">@item.Item2</div>
+                    <div class="quick-item-value">@item.Item3</div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- SERVICES với GIF icon -->
+<section class="section section-bg">
+    <div class="container">
+        <div class="section-heading center">
+            <p class="section-tag">Chuyên Khoa</p>
+            <h2>Dịch Vụ Khám Bệnh</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="services-grid">
+            @if (services != null)
+            {
+                @foreach (var svc in services)
+                {
+                    <div class="service-card">
+                        @* GIF/PNG icon - kích thước bằng icon, nền màu *@
+                        <div class="svc-icon-wrap" style="background:@svc.Bg">
+                            @if (!string.IsNullOrEmpty(svc.MediaUrl))
+                            {
+                                <img src="@svc.MediaUrl" alt="@svc.Title"
+                                     class="svc-gif"
+                                     onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+                                <svg style="display:none" width="32" height="32" viewBox="0 0 28 28" fill="none">
+                                    <rect x="12" y="4" width="4" height="20" rx="2" fill="@svc.IconColor"/>
+                                    <rect x="4" y="12" width="20" height="4" rx="2" fill="@svc.IconColor" opacity="0.6"/>
+                                </svg>
+                            }
+                            else
+                            {
+                                <svg width="32" height="32" viewBox="0 0 28 28" fill="none">
+                                    <rect x="12" y="4" width="4" height="20" rx="2" fill="@svc.IconColor"/>
+                                    <rect x="4" y="12" width="20" height="4" rx="2" fill="@svc.IconColor" opacity="0.6"/>
+                                </svg>
+                            }
+                        </div>
+                        <h3>@svc.Title</h3>
+                        <p>@svc.Desc</p>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+<!-- WHY US -->
+<section class="section">
+    <div class="container">
+        <div class="section-heading center">
+            <p class="section-tag">Tại Sao Chọn Chúng Tôi</p>
+            <h2>Cam Kết Chất Lượng Vượt Trội</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="why-grid">
+            @foreach (var w in new[] {
+                ("Bác Sĩ Hàng Đầu",  "100% bác sĩ chuyên khoa đào tạo trong và ngoài nước, kinh nghiệm 8–22 năm.", "#DBEAFE","#1D4ED8"),
+                ("Thiết Bị Hiện Đại", "MRI, CT-Scan, siêu âm 4D, xét nghiệm nhanh thế hệ mới.",                  "#D1FAE5","#065F46"),
+                ("Đặt Lịch Dễ Dàng", "Đặt lịch online 24/7, xác nhận ngay, không chờ đợi.",                      "#EDE9FE","#5B21B6"),
+                ("Hồ Sơ Bảo Mật",    "Thông tin bệnh án bảo mật tuyệt đối theo chuẩn quốc tế.",                  "#FEF3C7","#92400E"),
+            })
+            {
+                <div class="why-card" style="background:@w.Item3">
+                    <div class="why-icon">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                            <path d="M4 11L9 16L18 7" stroke="@w.Item4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 style="color:@w.Item4">@w.Item1</h3>
+                    <p style="color:@w.Item4;opacity:.8">@w.Item2</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- DOCTORS PREVIEW -->
+<section class="section section-bg">
+    <div class="container">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:52px;flex-wrap:wrap;gap:16px">
+            <div>
+                <p class="section-tag">Đội Ngũ Y Bác Sĩ</p>
+                <h2 style="margin-bottom:14px">Gặp Gỡ Các Bác Sĩ Chuyên Gia</h2>
+                <div style="width:56px;height:4px;background:linear-gradient(90deg,#0369A1,#0EA5E9);border-radius:2px"></div>
+            </div>
+            <a asp-controller="Doctors" asp-action="Index" class="btn btn-outline">Xem Tất Cả Bác Sĩ &rarr;</a>
+        </div>
+        <div class="doctors-grid">
+            @if (doctors != null)
+            {
+                @foreach (var doc in doctors)
+                {
+                    <div class="doctor-card">
+                        <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+                            <div style="width:64px;height:64px;flex-shrink:0;border-radius:50%;overflow:hidden;background:@doc.AvatarBg;display:flex;align-items:center;justify-content:center;">
+                                @if (!string.IsNullOrEmpty(doc.PhotoUrl))
+                                {
+                                    <img src="@doc.PhotoUrl" alt="@doc.Name"
+                                         style="width:64px;height:64px;object-fit:cover;object-position:@doc.PhotoPosition;display:block"
+                                         onerror="this.style.display='none'"/>
+                                }
+                                else
+                                {
+                                    <span style="color:@doc.AvatarFg;font-weight:800;font-size:18px">@doc.Initials</span>
+                                }
+                            </div>
+                            <div style="min-width:0;flex:1">
+                                <strong style="color:#1E293B;font-size:15px;line-height:1.3;display:block">@doc.Name</strong>
+                                <span style="background:@doc.AvatarBg;color:@doc.AvatarFg;display:inline-block;margin-top:6px;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700">@doc.Specialty</span>
+                            </div>
+                        </div>
+                        <p class="doctor-desc">@doc.Description</p>
+                        <div class="doctor-footer">
+                            <div>
+                                <span class="stars">@for (int i = 0; i < (int)doc.Rating; i++) { <text>&#9733;</text> }</span>
+                                <span style="font-size:13px;color:#64748B;margin-left:6px">@doc.Rating (@doc.ReviewCount đánh giá)</span>
+                            </div>
+                            <span style="font-size:13px;color:#64748B">@doc.Experience năm KN</span>
+                        </div>
+                        <a asp-controller="Booking" asp-action="Index" class="btn btn-primary btn-block">Đặt Lịch Khám</a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+    <div class="container">
+        <div class="section-heading center">
+            <p class="section-tag">Phản Hồi</p>
+            <h2 style="color:white">Bệnh Nhân Nói Gì Về Chúng Tôi</h2>
+            <div class="divider" style="margin:16px auto 0"></div>
+        </div>
+        <div class="testimonials-grid">
+            @foreach (var t in new[] {
+                ("Nguyễn Thị Mai","Tim mạch", "Bác sĩ tận tâm, giải thích rõ ràng. Phòng khám sạch sẽ, hiện đại. Rất hài lòng!",          "MA","/images/patients/patient1.png"),
+                ("Trần Văn Hùng", "Thần kinh","Đặt lịch online cực nhanh. Bác sĩ chuyên nghiệp, sẽ quay lại!",                             "HU","/images/patients/patient2.png"),
+                ("Lê Thị Hoa",   "Phụ sản",  "Theo dõi thai kỳ 9 tháng tại đây. Bác sĩ chu đáo, siêu âm 4D rất rõ nét. Recommend!",       "HO","/images/patients/patient3.png"),
+            })
+            {
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p class="testimonial-text">&ldquo;@t.Item3&rdquo;</p>
+                    <div class="testimonial-footer">
+                        <div style="width:44px;height:44px;flex-shrink:0;border-radius:50%;overflow:hidden;background:#0EA5E9;display:flex;align-items:center;justify-content:center;">
+                            @if (!string.IsNullOrEmpty(t.Item5))
+                            { <img src="@t.Item5" alt="@t.Item1" style="width:44px;height:44px;object-fit:cover;display:block" onerror="this.style.display='none'"/> }
+                            else
+                            { <span style="color:white;font-weight:800;font-size:15px">@t.Item4</span> }
+                        </div>
+                        <div>
+                            <div class="t-name">@t.Item1</div>
+                            <div class="t-role">Bệnh nhân @t.Item2</div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <div class="cta-inner">
+        <h2>Sẵn Sàng Đặt Lịch Khám?</h2>
+        <p style="font-size:17px;margin:16px 0 36px">Chỉ mất 2 phút để đặt lịch trực tuyến. Bác sĩ sẽ liên hệ xác nhận ngay!</p>
+        <a asp-controller="Booking" asp-action="Index" class="btn btn-primary btn-lg">Đặt Lịch Miễn Phí Ngay</a>
+        <p style="margin-top:20px;font-size:14px">Hoặc gọi hotline: <strong style="color:#0369A1">028 3456 7890</strong></p>
+    </div>
+</section>

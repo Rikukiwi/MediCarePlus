@@ -1,0 +1,93 @@
+@model MediCarePlus.Models.ContactMessage
+@{ ViewData["Title"] = "Liên hệ"; ViewData["ActivePage"] = "Contact"; }
+
+<section class="page-hero">
+    <div class="container">
+        <p class="tag">Liên Hệ</p>
+        <h1>Liên Hệ Với Chúng Tôi</h1>
+        <p class="sub">Chúng tôi luôn sẵn sàng hỗ trợ bạn mọi thắc mắc và yêu cầu</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:40px;align-items:start" class="contact-layout">
+            <div>
+                <h2 style="margin-bottom:8px">Thông Tin Liên Hệ</h2>
+                <div style="width:48px;height:4px;background:linear-gradient(90deg,#0369A1,#0EA5E9);border-radius:2px;margin-bottom:32px"></div>
+                @foreach (var c in new[] {
+                    ("M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z","Địa chỉ","123 Nguyễn Văn Linh, Phường Tân Phong, Quận 7, TP.HCM"),
+                    ("M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z","Hotline","028 3456 7890 (24/7)"),
+                    ("M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z","Email","info@medicare-plus.vn"),
+                    ("M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z","Giờ làm việc","Thứ 2 – Chủ Nhật: 07:00 – 20:00"),
+                })
+                {
+                    <div class="contact-info-item">
+                        <div class="contact-icon">
+                            <svg width="20" height="20" fill="none" stroke="#0369A1" stroke-width="1.8" viewBox="0 0 24 24">
+                                <path d="@c.Item1"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="contact-detail-label">@c.Item2</div>
+                            <div class="contact-detail-value">@c.Item3</div>
+                        </div>
+                    </div>
+                }
+                <div class="map-iframe">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3920.1!2d106.698!3d10.729!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z!5e0!3m2!1svi!2svn!4v1"
+                            width="100%" height="240" style="border:0" allowfullscreen loading="lazy" title="Bản đồ MediCare+"></iframe>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h2 style="font-size:22px;margin-bottom:28px">Gửi Tin Nhắn Cho Chúng Tôi</h2>
+                @if (TempData["Success"] != null)
+                {
+                    <div style="text-align:center;padding:40px 0">
+                        <div style="width:72px;height:72px;background:#D1FAE5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
+                            <svg width="32" height="32" fill="none" stroke="#10B981" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                        <h3 style="margin-bottom:10px">Gửi thành công!</h3>
+                        <p style="margin-bottom:24px">@TempData["Success"]</p>
+                        <a asp-action="Index" class="btn btn-primary">Gửi tin nhắn khác</a>
+                    </div>
+                }
+                else
+                {
+                    <form asp-action="Index" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" asp-for="Name">Họ và tên <span class="req">*</span></label>
+                                <input asp-for="Name" class="form-control" placeholder="Nguyễn Văn A"/>
+                                <span asp-validation-for="Name" class="invalid-feedback"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" asp-for="Phone">Số điện thoại <span class="req">*</span></label>
+                                <input asp-for="Phone" class="form-control" placeholder="0901234567"/>
+                                <span asp-validation-for="Phone" class="invalid-feedback"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" asp-for="Subject">Chủ đề</label>
+                            <select asp-for="Subject" class="form-control">
+                                <option value="">Chọn chủ đề</option>
+                                @foreach (var s in new[] { "Đặt lịch khám","Tư vấn dịch vụ","Phản hồi chất lượng","Hợp tác","Khác" })
+                                { <option value="@s">@s</option> }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" asp-for="Message">Nội dung <span class="req">*</span></label>
+                            <textarea asp-for="Message" class="form-control" rows="5" placeholder="Nội dung cần tư vấn..."></textarea>
+                            <span asp-validation-for="Message" class="invalid-feedback"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block" style="padding:16px;font-size:16px">Gửi Tin Nhắn</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); } }
