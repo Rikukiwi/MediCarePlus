@@ -1,8 +1,17 @@
-FROM mcr.microsoft.com/mssql/server:2022-latest
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY *.csproj .
+RUN dotnet restore
+COPY . .
+RUN dotnet publish "MediCarePlus.csproj" -c Release -o /app/publish
 
-ENV ACCEPT_EULA=Y
-ENV SA_PASSWORD=YourStrong@Pass123
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app/publish .
 
-EXPOSE 1433
+# Tat HTTPS redirect (Render dung HTTP ben trong)
+ENV ASPNETCORE_URLS=http://+:80
+ENV ASPNETCORE_ENVIRONMENT=Production
 
-CMD /opt/mssql/bin/sqlservr
+EXPOSE 80
+ENTRYPOINT ["dotnet", "MediCarePlus.dll"]

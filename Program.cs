@@ -21,17 +21,20 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
+    // XOA dong nay - khong dung HTTPS tren Render
+    // app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// XOA dong nay luon
+// app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name:    "default",
+    name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
