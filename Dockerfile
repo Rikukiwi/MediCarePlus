@@ -1,13 +1,8 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
+FROM mcr.microsoft.com/mssql/server:2022-latest
 
-COPY . .
+ENV ACCEPT_EULA=Y
+ENV SA_PASSWORD=YourStrong@Pass123
 
-RUN dotnet publish "MediCarePlus.csproj" -c Release -o /app/publish
+EXPOSE 1433
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
-WORKDIR /app
-
-COPY --from=build /app/publish .
-
-ENTRYPOINT ["dotnet", "MediCarePlus.dll"]
+CMD /opt/mssql/bin/sqlservr
