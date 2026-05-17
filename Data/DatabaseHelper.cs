@@ -15,7 +15,10 @@ namespace MediCarePlus.Data
 
         private SqlConnection OpenConnection()
         {
-            var conn = new SqlConnection(_conn);
+            // Somee can timeout lon hon
+            var builder = new SqlConnectionStringBuilder(_conn);
+            builder.ConnectTimeout = 30;
+            var conn = new SqlConnection(builder.ConnectionString);
             conn.Open();
             return conn;
         }
