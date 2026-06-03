@@ -1,0 +1,103 @@
+@model MediCarePlus.Models.DoctorFilterViewModel
+@{
+    ViewData["Title"]      = "Đội ngũ bác sĩ";
+    ViewData["ActivePage"] = "Doctors";
+}
+
+<section class="page-hero">
+    <div class="container">
+        <p class="tag">Đội Ngũ</p>
+        <h1>Bác Sĩ Chuyên Khoa</h1>
+        <p class="sub">Đội ngũ 50+ bác sĩ chuyên khoa được đào tạo chuyên sâu, giàu kinh nghiệm và tận tâm với bệnh nhân</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        <div class="filter-bar">
+            @foreach (var spec in Model.Specialties)
+            {
+                <a asp-action="Index" asp-route-specialty="@spec"
+                   class="filter-pill @(Model.SelectedSpecialty == spec ? "active" : "")">
+                    @spec
+                </a>
+            }
+        </div>
+
+        @if (!Model.Doctors.Any())
+        {
+            <div class="empty-state">
+                <div class="icon">🔍</div>
+                <h3 style="color:var(--text);margin-bottom:8px">Không tìm thấy bác sĩ</h3>
+                <p>Không có bác sĩ nào trong chuyên khoa này.</p>
+                <a asp-action="Index" asp-route-specialty="Tất cả" class="btn btn-primary" style="margin-top:20px">Xem tất cả</a>
+            </div>
+        }
+        else
+        {
+            <div class="doctors-grid">
+                @foreach (var doc in Model.Doctors)
+                {
+                    <div>
+                        <div class="doctor-card">
+                            <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+                                <div style="width:64px;height:64px;flex-shrink:0;border-radius:50%;overflow:hidden;
+                                            background:@doc.AvatarBg;display:flex;align-items:center;justify-content:center;">
+                                    @if (!string.IsNullOrEmpty(doc.PhotoUrl))
+                                    {
+                                        <img src="@doc.PhotoUrl" alt="@doc.Name"
+                                             style="width:64px;height:64px;object-fit:cover;object-position:@doc.PhotoPosition;display:block"
+                                             onerror="this.style.display='none'" />
+                                    }
+                                    else
+                                    {
+                                        <span style="color:@doc.AvatarFg;font-weight:800;font-size:18px">@doc.Initials</span>
+                                    }
+                                </div>
+                                <div style="min-width:0;flex:1">
+                                    <strong style="color:#1E293B;font-size:15px;line-height:1.3;display:block">@doc.Name</strong>
+                                    <span style="background:@doc.AvatarBg;color:@doc.AvatarFg;display:inline-block;
+                                                 margin-top:6px;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700">
+                                        @doc.Specialty
+                                    </span>
+                                </div>
+                            </div>
+
+                            <p class="doctor-desc">@doc.Description</p>
+
+                            <div class="doctor-footer">
+                                <div>
+                                    <span class="stars">@for (int i = 0; i < (int)doc.Rating; i++) { <text>&#9733;</text> }</span>
+                                    <span style="font-size:13px;color:#64748B;margin-left:6px">@doc.Rating (@doc.ReviewCount đánh giá)</span>
+                                </div>
+                                <span style="font-size:13px;color:#64748B">@doc.Experience năm KN</span>
+                            </div>
+
+                            <div class="degree-text">@doc.Degree</div>
+
+                            <a asp-controller="Booking" asp-action="Index" class="btn btn-primary btn-block">Đặt Lịch Khám</a>
+                        </div>
+
+                        <a asp-action="Detail" asp-route-id="@doc.Id"
+                           style="display:block;margin-top:8px;padding:8px;background:transparent;
+                                  border:1px solid var(--border);border-radius:10px;color:var(--gray);
+                                  font-size:13px;text-align:center;text-decoration:none;transition:all .15s"
+                           onmouseover="this.style.background='var(--bg)'"
+                           onmouseout="this.style.background='transparent'">
+                            Xem chi tiết &rarr;
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="cta-inner">
+        <h2>Sẵn Sàng Đặt Lịch?</h2>
+        <p style="font-size:16px;margin:16px 0 32px">Chọn bác sĩ phù hợp và đặt lịch trực tuyến chỉ trong 2 phút.</p>
+        <a asp-controller="Booking" asp-action="Index" class="btn btn-primary btn-lg">Đặt Lịch Ngay</a>
+    </div>
+</section>

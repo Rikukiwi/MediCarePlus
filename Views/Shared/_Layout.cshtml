@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] – Rau Má+</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="container navbar-inner">
+        <a asp-controller="Home" asp-action="Index" class="navbar-brand">
+            <div class="brand-icon">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                    <rect x="9" y="2" width="4" height="18" rx="2" fill="white"/>
+                    <rect x="2" y="9" width="18" height="4" rx="2" fill="white"/>
+                </svg>
+            </div>
+            <div>
+                <div class="brand-name">Rau Má<span class="brand-plus">+</span></div>
+                <div class="brand-sub">PHÒNG KHÁM ĐA KHOA</div>
+            </div>
+        </a>
+
+        <div class="navbar-links">
+            <a asp-controller="Home"    asp-action="Index"  class="nav-link @(ViewData["ActivePage"]?.ToString()=="Home"   ?"active":"")">Trang chủ</a>
+            <a asp-controller="Home"    asp-action="About"  class="nav-link @(ViewData["ActivePage"]?.ToString()=="About"  ?"active":"")">Giới thiệu</a>
+            <a asp-controller="Doctors" asp-action="Index"  class="nav-link @(ViewData["ActivePage"]?.ToString()=="Doctors"?"active":"")">Bác sĩ</a>
+            <a asp-controller="Booking" asp-action="Index"  class="nav-link @(ViewData["ActivePage"]?.ToString()=="Booking"?"active":"")">Đặt lịch</a>
+            <a asp-controller="Contact" asp-action="Index"  class="nav-link @(ViewData["ActivePage"]?.ToString()=="Contact"?"active":"")">Liên hệ</a>
+
+            @if (Context.Session.GetString("UserName") != null)
+            {
+                @if (Context.Session.GetString("UserRole") == "Admin")
+                {
+                    <a asp-controller="Admin" asp-action="Index" class="nav-link" style="color:#7DD3FC">⚙ Admin</a>
+                }
+                <span class="nav-user">👤 @Context.Session.GetString("UserName")</span>
+                <a asp-controller="Account" asp-action="Logout" class="nav-link" style="color:#FCA5A5">Đăng xuất</a>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Login"    class="nav-link">Đăng nhập</a>
+                <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-sm" style="margin-left:12px">Đăng ký</a>
+            }
+        </div>
+
+        <button class="hamburger" id="hamburgerBtn">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+        <a asp-controller="Home"    asp-action="Index">Trang chủ</a>
+        <a asp-controller="Home"    asp-action="About">Giới thiệu</a>
+        <a asp-controller="Doctors" asp-action="Index">Bác sĩ</a>
+        <a asp-controller="Booking" asp-action="Index">Đặt lịch</a>
+        <a asp-controller="Contact" asp-action="Index">Liên hệ</a>
+        @if (Context.Session.GetString("UserName") != null)
+        {
+            @if (Context.Session.GetString("UserRole") == "Admin")
+            { <a asp-controller="Admin" asp-action="Index">⚙ Admin</a> }
+            <a asp-controller="Account" asp-action="Logout" style="color:#FCA5A5">Đăng xuất</a>
+        }
+        else
+        {
+            <a asp-controller="Account" asp-action="Login">Đăng nhập</a>
+            <a asp-controller="Account" asp-action="Register">Đăng ký</a>
+        }
+    </div>
+</nav>
+
+<main>@RenderBody()</main>
+
+<footer class="footer">
+    <div class="container footer-grid">
+        <div>
+            <div class="footer-logo">
+                <div class="brand-icon">
+                    <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                        <rect x="9" y="2" width="4" height="18" rx="2" fill="white"/>
+                        <rect x="2" y="9" width="18" height="4" rx="2" fill="white"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="brand-name">Rau Má<span class="brand-plus">+</span></div>
+                    <div class="brand-sub">PHÒNG KHÁM ĐA KHOA</div>
+                </div>
+            </div>
+            <p class="footer-desc">Phòng khám đa khoa uy tín hàng đầu TPHCM với 15 năm kinh nghiệm phục vụ hơn 200,000 bệnh nhân.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Trang</h4>
+            <a asp-controller="Home"    asp-action="Index">Trang chủ</a>
+            <a asp-controller="Home"    asp-action="About">Giới thiệu</a>
+            <a asp-controller="Doctors" asp-action="Index">Bác sĩ</a>
+            <a asp-controller="Booking" asp-action="Index">Đặt lịch</a>
+            <a asp-controller="Contact" asp-action="Index">Liên hệ</a>
+        </div>
+        <div class="footer-col">
+            <h4>Chuyên khoa</h4>
+            <span>Tim mạch</span><span>Nội tổng quát</span><span>Nhi khoa</span>
+            <span>Phụ sản</span><span>Thần kinh</span><span>Da liễu</span>
+        </div>
+        <div class="footer-col">
+            <h4>Liên hệ</h4>
+            <span>📍 123 Nguyễn Văn Linh, Q.7, TPHCM</span>
+            <span>📞 028 3456 7890</span>
+            <span>✉️ info@medicare-plus.vn</span>
+            <span>🕐 07:00 – 20:00 (Cả tuần)</span>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span>© 2024 Rau Má+. Bảo lưu mọi quyền.</span>
+        <span>Giấy phép: 2207/BYT-GPHĐ</span>
+    </div>
+</footer>
+
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

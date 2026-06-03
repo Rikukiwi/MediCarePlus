@@ -1,0 +1,69 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["AdminPage"] = "Dashboard";
+    Layout = "_AdminLayout";
+    var appointments = ViewBag.RecentAppointments as List<MediCarePlus.Models.Appointment> ?? new();
+}
+
+<div class="admin-stats-grid">
+    @foreach (var s in new[] {
+        ("Tổng bác sĩ",   ViewBag.TotalDoctors?.ToString()      ?? "0", "#DBEAFE","#1D4ED8"),
+        ("Tổng lịch hẹn", ViewBag.TotalAppointments?.ToString() ?? "0", "#D1FAE5","#065F46"),
+        ("Chờ xác nhận",  ViewBag.PendingCount?.ToString()      ?? "0", "#FEF3C7","#92400E"),
+        ("Người dùng",    ViewBag.TotalUsers?.ToString()        ?? "0", "#EDE9FE","#5B21B6"),
+    })
+    {
+        <div class="admin-stat-card" style="background:@s.Item3">
+            <div class="stat-label" style="color:@s.Item4;font-size:14px;font-weight:700;margin-bottom:8px">@s.Item1</div>
+            <div class="stat-value" style="color:@s.Item4;font-size:36px;font-weight:900">@s.Item2</div>
+        </div>
+    }
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h3>Lịch hẹn gần đây</h3>
+        <a asp-action="Appointments" class="btn btn-outline btn-sm">Xem tất cả</a>
+    </div>
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Bệnh nhân</th><th>SDT</th><th>Chuyên khoa</th>
+                    <th>Ngày khám</th><th>Giờ</th><th>Trạng thái</th><th>Hàng chờ</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!appointments.Any())
+                {
+                    <tr><td colspan="7" style="text-align:center;padding:32px;color:var(--gray)">Chưa có lịch hẹn nào</td></tr>
+                }
+                @foreach (var a in appointments)
+                {
+                    <tr>
+                        <td><strong>@a.PatientName</strong></td>
+                        <td style="color:var(--gray)">@a.Phone</td>
+                        <td>@a.Specialty</td>
+                        <td style="color:var(--gray)">@a.AppointmentDate.ToString("dd/MM/yyyy")</td>
+                        <td style="color:var(--gray)">@a.AppointmentTime</td>
+                        <td>
+                            @if (a.Status == "Da xac nhan" || a.Status == "Đã xác nhận")
+                            { <span class="badge-confirmed">@a.Status</span> }
+                            else if (a.Status == "Da huy" || a.Status == "Đã huỷ")
+                            { <span class="badge-cancelled">@a.Status</span> }
+                            else
+                            { <span class="badge-waiting">@a.Status</span> }
+                        </td>
+                        <td>
+                            @if (a.Status != "Da xac nhan" && a.Status != "Da huy" && a.Status != "Đã xác nhận" && a.Status != "Đã huỷ")
+                            {
+                                <a asp-action="ConfirmAppointment" asp-route-id="@a.Id" class="btn-action btn-confirm">&#10003; Xac nhan</a>
+                                <a asp-action="CancelAppointment"  asp-route-id="@a.Id" class="btn-action btn-cancel" onclick="return confirm('Hủy lịch hẹn này?')">&#10005; Huy</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

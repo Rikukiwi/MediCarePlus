@@ -1,0 +1,85 @@
+@{ ViewData["Title"] = "Giới thiệu"; ViewData["ActivePage"] = "About"; }
+
+<section class="page-hero">
+    <div class="container">
+        <p class="tag">Giới Thiệu</p>
+        <h1>Về Rau Má+</h1>
+        <p class="sub">Phòng khám đa khoa hàng đầu TPHCM với 15 năm kinh nghiệm chăm sóc sức khỏe cộng đồng</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="about-grid">
+            <div>
+                <p class="section-tag">Câu Chuyện Của Chúng Tôi</p>
+                <h2 style="margin-bottom:20px">15 Năm Đồng Hành Cùng Sức Khỏe Cộng Đồng</h2>
+                <p style="margin-bottom:20px">Thành lập năm 2009, Rau Má+ khởi đầu với sứ mệnh mang đến dịch vụ chăm sóc sức khỏe chất lượng quốc tế nhưng chi phí hợp lý cho người dân TPHCM.</p>
+                <p style="margin-bottom:32px">Qua 15 năm phát triển, chúng tôi đã phục vụ hơn 200,000 lượt bệnh nhân, không ngừng đầu tư vào đội ngũ bác sĩ và trang thiết bị y tế tiên tiến.</p>
+                <div class="stat-mini-grid">
+                    @foreach (var s in new[] { ("2009","Năm thành lập"),("50+","Bác sĩ chuyên khoa"),("200k+","Lượt bệnh nhân"),("8","Chuyên khoa") })
+                    {
+                        <div class="stat-mini">
+                            <div class="stat-mini-val">@s.Item1</div>
+                            <div class="stat-mini-lbl">@s.Item2</div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="mission-card">
+                <h3 style="font-size:22px;margin-bottom:24px">Sứ Mệnh &amp; Tầm Nhìn</h3>
+                <div class="mission-block">
+                    <div class="mission-block-label">Sứ mệnh</div>
+                    <p>Cung cấp dịch vụ y tế chất lượng cao, tận tâm và đáng tin cậy, đặt sức khỏe bệnh nhân lên hàng đầu.</p>
+                </div>
+                <div class="mission-block">
+                    <div class="mission-block-label">Tầm nhìn</div>
+                    <p>Trở thành chuỗi phòng khám hàng đầu Việt Nam với chuẩn mực quốc tế vào năm 2030.</p>
+                </div>
+                <div class="mission-block">
+                    <div class="mission-block-label">Giá trị cốt lõi</div>
+                    <p>Tận tâm – Chuyên nghiệp – Đổi mới – Trách nhiệm – Minh bạch trong mọi dịch vụ.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-bg">
+    <div class="container">
+        <div class="section-heading center">
+            <p class="section-tag">Cơ Sở Vật Chất</p>
+            <h2>Trang Thiết Bị Hiện Đại</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="info-grid">
+            @foreach (var f in new[] {
+                ("MRI &amp; CT-Scan 128 lát",  "Chẩn đoán hình ảnh chính xác với hệ thống MRI 3 Tesla và CT-Scan 128 lát cắt thế hệ mới."),
+                ("Siêu âm 4D",                 "Hệ thống siêu âm màu 4D cho hình ảnh sắc nét, chẩn đoán chính xác."),
+                ("Phòng mổ vô trùng",           "3 phòng phẫu thuật tiêu chuẩn quốc tế với hệ thống lọc không khí chuẩn ISO 5."),
+                ("Xét nghiệm nhanh",            "Kết quả xét nghiệm trong 30 phút với máy phân tích tự động."),
+                ("Nội soi hiện đại",            "Hệ thống nội soi HD với công nghệ NBI tiên tiến."),
+                ("Kho thuốc chuẩn GSP",         "Nhà thuốc đạt chuẩn GSP với hơn 2,000 danh mục thuốc chính hãng."),
+            })
+            {
+                <div class="info-card">
+                    <div class="info-icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M3 10L8 15L17 6" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>@Html.Raw(f.Item1)</h3>
+                    <p style="font-size:14px;line-height:1.65">@f.Item2</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="cta-inner">
+        <h2>Hãy Để Chúng Tôi Chăm Sóc Sức Khỏe Của Bạn</h2>
+        <p style="font-size:17px;margin:16px 0 36px">Đặt lịch khám ngay hôm nay để được tư vấn bởi đội ngũ bác sĩ chuyên khoa hàng đầu.</p>
+        <a asp-controller="Booking" asp-action="Index" class="btn btn-primary btn-lg">Đặt Lịch Ngay</a>
+    </div>
+</section>

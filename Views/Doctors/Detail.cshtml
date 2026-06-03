@@ -1,0 +1,71 @@
+@model MediCarePlus.Models.Doctor
+@{ ViewData["Title"] = Model.Name; ViewData["ActivePage"] = "Doctors"; }
+
+<section style="background:linear-gradient(135deg,#0C3D5E,#1A5276);padding:48px 24px">
+    <div class="container">
+        <a asp-action="Index" class="btn btn-ghost btn-sm" style="margin-bottom:28px;display:inline-block">&larr; Quay lại</a>
+        <div style="display:flex;gap:28px;align-items:center;flex-wrap:wrap">
+            <div style="width:90px;height:90px;flex-shrink:0;border-radius:50%;overflow:hidden;background:@Model.AvatarBg;display:flex;align-items:center;justify-content:center;">
+                @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+                { <img src="@Model.PhotoUrl" alt="@Model.Name" style="width:90px;height:90px;object-fit:cover;object-position:@Model.PhotoPosition;display:block" onerror="this.style.display='none'"/> }
+                else
+                { <span style="color:@Model.AvatarFg;font-weight:800;font-size:28px">@Model.Initials</span> }
+            </div>
+            <div>
+                <h1 style="color:white;font-size:clamp(24px,4vw,38px);margin-bottom:10px">@Model.Name</h1>
+                <span style="background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);display:inline-block;padding:6px 16px;border-radius:20px;font-size:14px;font-weight:700">@Model.Specialty</span>
+                <div style="color:rgba(255,255,255,.7);font-size:14px;margin-top:10px">@Model.Degree &bull; @Model.Experience năm kinh nghiệm</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="doctor-detail-grid">
+            <div class="form-card">
+                <h2 style="font-size:20px;margin-bottom:16px">Giới thiệu</h2>
+                <p style="font-size:16px;line-height:1.85;margin-bottom:20px">@Model.Description</p>
+                <p style="font-size:16px;line-height:1.85;margin-bottom:24px">Với @Model.Experience năm kinh nghiệm trong chuyên khoa @Model.Specialty, bác sĩ đã điều trị thành công hàng ngàn ca bệnh phức tạp.</p>
+                <div style="display:flex;align-items:center;gap:10px">
+                    <span class="stars" style="font-size:18px">@for(int i=0;i<(int)Model.Rating;i++){<text>&#9733;</text>}</span>
+                    <span style="font-weight:700">@Model.Rating / 5</span>
+                    <span style="color:var(--gray)">(@Model.ReviewCount đánh giá)</span>
+                </div>
+                <div style="margin-top:32px;border-top:1px solid var(--border);padding-top:28px">
+                    <h3 style="font-size:16px;margin-bottom:20px">Đánh giá gần đây</h3>
+                    @foreach (var r in new[] {
+                        ("Nguyễn Văn Bình","Bác sĩ rất tận tâm, giải thích chi tiết và dễ hiểu. Rất hài lòng!"),
+                        ("Trần Thị Lan",   "Khám rất kỹ, chẩn đoán chính xác. Sẽ quay lại lần sau."),
+                        ("Lê Minh Tuấn",   "Chuyên môn giỏi, phòng khám sạch sẽ. Thời gian chờ hơi lâu."),
+                    })
+                    {
+                        <div style="margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)">
+                            <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                                <strong style="font-size:14px">@r.Item1</strong>
+                                <span style="color:#F59E0B">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                            </div>
+                            <p style="font-size:14px;margin:0">@r.Item2</p>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div>
+                <div class="sidebar-card" style="margin-bottom:16px">
+                    <h3 style="font-size:16px;margin-bottom:18px">Thông tin</h3>
+                    <div class="detail-info-row"><span class="detail-info-key">Chuyên khoa</span><span class="detail-info-value">@Model.Specialty</span></div>
+                    <div class="detail-info-row"><span class="detail-info-key">Bằng cấp</span><span class="detail-info-value">@Model.Degree</span></div>
+                    <div class="detail-info-row"><span class="detail-info-key">Kinh nghiệm</span><span class="detail-info-value">@Model.Experience năm</span></div>
+                    <div class="detail-info-row"><span class="detail-info-key">Đánh giá</span><span class="detail-info-value" style="color:#F59E0B">@Model.Rating &#9733;</span></div>
+                </div>
+                <a asp-controller="Booking" asp-action="Index" class="btn btn-primary btn-block btn-lg" style="margin-bottom:12px">Đặt Lịch Với Bác Sĩ Này</a>
+                <div class="sidebar-hotline">
+                    <h3>Cần hỗ trợ?</h3>
+                    <p style="font-size:14px;opacity:.85;margin-bottom:14px">Gọi hotline để được tư vấn miễn phí</p>
+                    <div class="number">028 3456 7890</div>
+                    <div class="sub">Hotline 24/7</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

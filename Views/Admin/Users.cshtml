@@ -1,0 +1,41 @@
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+    ViewData["AdminPage"] = "Users";
+    Layout = "_AdminLayout";
+    var users = ViewBag.Users as List<MediCarePlus.Models.AppUser> ?? new();
+}
+
+<div class="admin-card">
+    <div class="admin-card-header"><h3>Danh sách người dùng (@users.Count)</h3></div>
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr><th>#</th><th>Họ và tên</th><th>Email</th><th>Số điện thoại</th><th>Ngày đăng ký</th><th>Vai trò</th></tr>
+            </thead>
+            <tbody>
+                @if (!users.Any())
+                {
+                    <tr><td colspan="6" style="text-align:center;padding:40px;color:var(--gray)">Chưa có người nào đăng ký</td></tr>
+                }
+                @foreach (var u in users)
+                {
+                    <tr>
+                        <td style="color:var(--gray);font-size:13px">@u.Id</td>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px">
+                                <div style="width:36px;height:36px;border-radius:50%;background:#DBEAFE;display:flex;align-items:center;justify-content:center;color:#1D4ED8;font-weight:800;font-size:13px">
+                                    @u.FullName.Split(' ').Last().Substring(0, Math.Min(2, u.FullName.Split(' ').Last().Length)).ToUpper()
+                                </div>
+                                <strong>@u.FullName</strong>
+                            </div>
+                        </td>
+                        <td style="color:var(--gray)">@u.Email</td>
+                        <td style="color:var(--gray)">@u.Phone</td>
+                        <td style="color:var(--gray);font-size:13px">@u.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td><span class="badge-confirmed">@u.Role</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

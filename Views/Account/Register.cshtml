@@ -1,0 +1,63 @@
+@model MediCarePlus.Models.RegisterViewModel
+@{ ViewData["Title"] = "Đăng ký"; ViewData["ActivePage"] = "Register"; }
+
+<section class="page-hero">
+    <div class="container">
+        <p class="tag">Tài khoản</p>
+        <h1>Đăng Ký Tài Khoản</h1>
+        <p class="sub">Tạo tài khoản miễn phí để đặt lịch và theo dõi lịch khám</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container" style="max-width:560px">
+        <div class="form-card">
+            <h2 style="font-size:22px;margin-bottom:28px;text-align:center">Tạo tài khoản mới &#127973;</h2>
+
+            <form asp-controller="Account" asp-action="Register" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label class="form-label">Họ và tên <span class="req">*</span></label>
+                    <input asp-for="FullName" class="form-control" placeholder="Nguyen Van A"/>
+                    <span asp-validation-for="FullName" class="invalid-feedback"></span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Email <span class="req">*</span></label>
+                        <input asp-for="Email" class="form-control" placeholder="example@gmail.com" autocomplete="email"/>
+                        <span asp-validation-for="Email" class="invalid-feedback"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Số điện thoại <span class="req">*</span></label>
+                        <input asp-for="Phone" class="form-control" placeholder="0901234567"/>
+                        <span asp-validation-for="Phone" class="invalid-feedback"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Mật khẩu <span class="req">*</span></label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Tối thiểu 6 kí tự" autocomplete="new-password"/>
+                        <span asp-validation-for="Password" class="invalid-feedback"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Xác nhận mật khẩu  <span class="req">*</span></label>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Nhập lại mật khẩu" autocomplete="new-password"/>
+                        <span asp-validation-for="ConfirmPassword" class="invalid-feedback"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" style="padding:15px;font-size:16px;margin-top:8px">Tạo tài khoản</button>
+
+                <p style="text-align:center;margin-top:20px;color:var(--gray);font-size:14px">
+                    Đã có tài khoản?
+                    <a asp-controller="Account" asp-action="Login" style="color:var(--primary);font-weight:700">Đăng nhập</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); } }

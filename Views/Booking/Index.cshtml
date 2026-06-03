@@ -1,0 +1,77 @@
+@model MediCarePlus.Models.Appointment
+@{ ViewData["Title"]="Đặt lịch khám";ViewData["ActivePage"]="Booking";
+var specialties=ViewBag.Specialties as List<string>??new List<string>();
+var allDoctors=ViewBag.Doctors as List<MediCarePlus.Models.Doctor>??new List<MediCarePlus.Models.Doctor>();
+var times=ViewBag.Times as List<string>??new List<string>();
+var appointments=ViewBag.Appointments as List<MediCarePlus.Models.Appointment>??new List<MediCarePlus.Models.Appointment>();
+bool showHistory=Context.Request.Query["tab"]=="history"; }
+<div class="page-hero">
+<div class="page-hero-content">
+<p class="page-kicker">// Online</p>
+<h1 class="page-title">Đặt Lích Khám</h1>
+<p class="page-subtitle">Điền thông tin bên dưới, chúng tôi sẽ xác nhận lịch hẹn trong vòng 30 phút</p>
+</div></div>
+<section style="background:#050505;padding:5rem 0">
+<div class="section" style="max-width:1000px">
+<div class="tab-bar">
+<a href="@Url.Action("Index")" class="tab-btn @(!showHistory?"active":"")">Đặt lịch mới</a>
+<a href="@Url.Action("Index")?tab=history" class="tab-btn @(showHistory?"active":"")">Lich Da Dat (@appointments.Count)</a>
+</div>
+@if(showHistory){
+@if(!appointments.Any()){<div class="empty-state"><div class="empty-icon">&#128203;</div><div class="empty-title">Chua co lich hen</div><div class="empty-text">Dat lich kham de xem lich hen tai day</div><a href="@Url.Action("Index")" class="btn btn-ghost" style="margin-top:1.5rem">Dat Lich Ngay</a></div>}
+else{@foreach(var a in appointments){
+<div class="appt-card">
+<div style="display:flex;align-items:center;gap:1rem">
+<div style="width:46px;height:46px;border-radius:50%;background:rgba(14,165,233,.12);border:1px solid rgba(14,165,233,.22);display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-style:italic;font-size:1.1rem;color:#fff;flex-shrink:0">
+@a.PatientName.Split(' ').Last().Substring(0,Math.Min(2,a.PatientName.Split(' ').Last().Length)).ToUpper()</div>
+<div><div class="appt-patient">@a.PatientName</div>
+<div class="appt-meta">@a.Specialty @if(!string.IsNullOrEmpty(a.DoctorName)){<text>• BS: @a.DoctorName</text>} • @a.AppointmentDate.ToString("dd/MM/yyyy") luc @a.AppointmentTime</div></div></div>
+<div style="text-align:right">
+@if(a.Status=="Da xac nhan"||a.Status=="Đã xác nhận"){<span class="badge badge-confirmed">Da xac nhan</span>}
+else if(a.Status=="Da huy"||a.Status=="Đã huỷ"){<span class="badge badge-cancelled">Da huy</span>}
+else{<span class="badge badge-pending">@a.Status</span>}
+<div style="font-size:.72rem;color:rgba(255,255,255,.3);font-family:'Barlow',sans-serif;margin-top:4px">@a.CreatedAt.ToString("HH:mm dd/MM/yyyy")</div>
+</div></div>}}}
+else{
+<div style="display:grid;grid-template-columns:1.6fr 1fr;gap:2rem;align-items:start" class="booking-layout">
+<div>
+@if(TempData["Success"]!=null){<div class="alert alert-success"><div class="alert-icon">&#9989;</div><div class="alert-text"><div class="alert-head">Đặt lịch khám thành công!</div><div class="alert-body">@TempData["Success"]</div></div></div>}
+<div class="glass" style="border-radius:var(--radius-card);padding:2rem">
+<h3 style="font-family:'Instrument Serif',serif;font-style:italic;font-size:1.75rem;color:#fff;margin-bottom:1.5rem">Thông tin đặt lịch</h3>
+<form asp-action="Index" method="post">@Html.AntiForgeryToken()
+<div class="form-row">
+<div class="form-group"><label class="form-label">Ho va ten <span class="req">*</span></label><input asp-for="PatientName" class="form-input" placeholder="Nguyen Van A"/><span asp-validation-for="PatientName" class="invalid-feedback"></span></div>
+<div class="form-group"><label class="form-label">So dien thoai <span class="req">*</span></label><input asp-for="Phone" class="form-input" placeholder="0901234567"/><span asp-validation-for="Phone" class="invalid-feedback"></span></div>
+</div>
+<div class="form-group"><label class="form-label">Email</label><input asp-for="Email" type="email" class="form-input" placeholder="example@gmail.com"/><span asp-validation-for="Email" class="invalid-feedback"></span></div>
+<div class="form-row">
+<div class="form-group"><label class="form-label">Chuyen khoa <span class="req">*</span></label>
+<select id="Specialty" asp-for="Specialty" class="form-input"><option value="">Chọn chuyên khoa</option>@foreach(var s in specialties){<option value="@s">@s</option>}</select>
+<span asp-validation-for="Specialty" class="invalid-feedback"></span></div>
+<div class="form-group"><label class="form-label">Bac si (tuy chon)</label>
+<select id="DoctorName" asp-for="DoctorName" class="form-input"><option value="">Bất kì bác sĩ</option>@foreach(var d in allDoctors){<option value="@d.Name">@d.Name</option>}</select></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label class="form-label">Ngày khám <span class="req">*</span></label><input asp-for="AppointmentDate" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" class="form-input"/><span asp-validation-for="AppointmentDate" class="invalid-feedback"></span></div>
+<div class="form-group"><label class="form-label">Giờ Khám <span class="req">*</span></label>
+<select asp-for="AppointmentTime" class="form-input"><option value="">Chon gio</option>@foreach(var t in times){<option value="@t">@t</option>}</select>
+<span asp-validation-for="AppointmentTime" class="invalid-feedback"></span></div>
+</div>
+<div class="form-group"><label class="form-label">Triệu chứng / Ghi chú</label><textarea asp-for="Note" class="form-input" rows="3" placeholder="Mô tả triệu chứng..."></textarea></div>
+<button type="submit" class="btn btn-primary btn-block btn-lg">Xác nhận đặt lịch</button>
+<p style="text-align:center;margin-top:1rem;font-size:.8rem;color:rgba(255,255,255,.3);font-family:'Barlow',sans-serif">Hotline: <span style="color:rgba(14,165,233,.7)">028 3456 7890</span></p>
+</form></div></div>
+<div class="booking-sidebar">
+<div class="sidebar-card glass">
+<h4 style="font-family:'Instrument Serif',serif;font-style:italic;font-size:1.25rem;color:#fff;margin-bottom:1.25rem">Huong Dan Dat Lich</h4>
+@{var steps=new[]{"Điền đầy đủ thông tin","Nhận tin nhắn của SMS trong 30 phút","Đến đúng giờ ,đem CMND và bảo hiểm y tế","Khám và thanh toán tại quầy"};}
+@for(int i=0;i<steps.Length;i++){<div class="sidebar-step" style="@(i<3?"margin-bottom:1rem":"")"><div class="step-num">@(i+1)</div><div class="step-text">@steps[i]</div></div>}
+</div>
+<div class="sidebar-hotline">
+<p style="font-size:.72rem;color:rgba(255,255,255,.4);font-family:'Barlow',sans-serif;letter-spacing:.1em;text-transform:uppercase">Lien He Khan Cap</p>
+<div class="hotline-number">028 3456 7890</div>
+<div class="hotline-sub">Hotline 24/7 - Hỗ trợ tra cứu</div>
+</div>
+</div></div>}
+</div></section>
+@section Scripts{@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}}
