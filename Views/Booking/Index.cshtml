@@ -5,11 +5,38 @@ var allDoctors=ViewBag.Doctors as List<MediCarePlus.Models.Doctor>??new List<Med
 var times=ViewBag.Times as List<string>??new List<string>();
 var appointments=ViewBag.Appointments as List<MediCarePlus.Models.Appointment>??new List<MediCarePlus.Models.Appointment>();
 bool showHistory=Context.Request.Query["tab"]=="history"; }
-<div class="page-hero" style="background:linear-gradient(135deg,#0a1628 0%,#0d2444 60%,#0f3460 100%)">
-    <div class="page-hero-content">
-        <p class="page-kicker">// Online</p>
-        <h1 class="page-title">Đặt Lịch Khám</h1>
-        <p class="page-subtitle">
+<div style="background:linear-gradient(135deg,#0a1628 0%,#0d2444 60%,#0f3460 100%);
+    padding:7rem 2.5rem 3rem;
+    position:relative;
+    overflow:hidden;
+    min-height:280px;
+    display:flex;
+    align-items:flex-end;">
+
+    <!-- Hieu ung sang goc trai -->
+    <div style="position:absolute;inset:0;
+    background:radial-gradient(ellipse at 25% 60%,rgba(14,165,233,0.15) 0%,transparent 65%);
+    z-index:1"></div>
+
+    <!-- Luoi ke trang tri -->
+    <div style="position:absolute;inset:0;
+    background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+    background-size:60px 60px;
+    z-index:1"></div>
+
+    <div style="position:relative;z-index:2;max-width:1200px;margin:0 auto;width:100%">
+        <p style="font-size:.7rem;color:rgba(255,255,255,.4);letter-spacing:.2em;
+            text-transform:uppercase;margin-bottom:.75rem;font-family:'Barlow',sans-serif">
+            // Online
+        </p>
+        <h1 style="font-family:'Instrument Serif',serif;font-style:italic;
+            font-size:clamp(2.5rem,6vw,4.5rem);color:#fff;
+            line-height:.9;letter-spacing:-.04em;margin-bottom:.75rem">
+            Đặt Lịch Khám
+        </h1>
+        <p style="font-size:.95rem;color:rgba(255,255,255,.5);
+            font-family:'Barlow',sans-serif;font-weight:300;max-width:480px">
             Điền thông tin bên dưới, chúng tôi sẽ xác nhận lịch hẹn trong vòng 30 phút
         </p>
     </div>
