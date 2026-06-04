@@ -5,12 +5,15 @@ var allDoctors=ViewBag.Doctors as List<MediCarePlus.Models.Doctor>??new List<Med
 var times=ViewBag.Times as List<string>??new List<string>();
 var appointments=ViewBag.Appointments as List<MediCarePlus.Models.Appointment>??new List<MediCarePlus.Models.Appointment>();
 bool showHistory=Context.Request.Query["tab"]=="history"; }
-<div class="page-hero">
-<div class="page-hero-content">
-<p class="page-kicker">// Online</p>
-<h1 class="page-title">Đặt Lích Khám</h1>
-<p class="page-subtitle">Điền thông tin bên dưới, chúng tôi sẽ xác nhận lịch hẹn trong vòng 30 phút</p>
-</div></div>
+<div class="page-hero" style="background:linear-gradient(135deg,#0a1628 0%,#0d2444 60%,#0f3460 100%)">
+    <div class="page-hero-content">
+        <p class="page-kicker">// Online</p>
+        <h1 class="page-title">Đặt Lịch Khám</h1>
+        <p class="page-subtitle">
+            Điền thông tin bên dưới, chúng tôi sẽ xác nhận lịch hẹn trong vòng 30 phút
+        </p>
+    </div>
+</div>
 <section style="background:#050505;padding:5rem 0">
 <div class="section" style="max-width:1000px">
 <div class="tab-bar">

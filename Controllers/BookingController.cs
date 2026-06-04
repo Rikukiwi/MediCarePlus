@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 using MediCarePlus.Data;
 using MediCarePlus.Models;
 
@@ -19,15 +19,22 @@ namespace MediCarePlus.Controllers
                 TempData["LoginRequired"] = "Vui lòng đăng nhập để đặt lịch khám!";
                 return RedirectToAction("Login", "Account");
             }
-            ViewBag.Specialties  = SeedData.GetSpecialties().Where(s => s != "Tất cả").ToList();
-            ViewBag.Doctors      = SeedData.GetDoctors();
-            ViewBag.Times        = SeedData.GetAppointmentTimes();
+
+            ViewBag.Specialties = SeedData.GetSpecialties().Where(s => s != "Tất cả").ToList();
+            ViewBag.Doctors = SeedData.GetDoctors();
+            ViewBag.Times = SeedData.GetAppointmentTimes();
+
             var email = HttpContext.Session.GetString("UserEmail") ?? "";
             ViewBag.Appointments = _db.LayLichHenCuaNguoiDung(email);
-            var model = new Appointment
-            {
-                PatientName = HttpContext.Session.GetString("UserName") ?? ""
-            };
+
+            var model = new Appointment();
+
+            // Lay dung ten tu session
+            var userName = HttpContext.Session.GetString("UserName") ?? "";
+            // Neu UserName la email thi de trong cho user tu nhap
+            model.PatientName = userName.Contains("@") ? "" : userName;
+            model.Email = email;
+
             return View(model);
         }
 
