@@ -1,48 +1,67 @@
 @{
-    ViewData["Title"] = "Quản lý lịch hẹn";
-    ViewData["AdminPage"] = "Appointments";
+    ViewData["Title"]     = "Quản lý bác sĩ";
+    ViewData["AdminPage"] = "Doctors";
     Layout = "_AdminLayout";
-    var appointments = ViewBag.Appointments as List<MediCarePlus.Models.Appointment> ?? new();
+    var doctors = ViewBag.Doctors as List<MediCarePlus.Models.Doctor> ?? new List<MediCarePlus.Models.Doctor>();
 }
 
 <div class="admin-card">
-    <div class="admin-card-header"><h3>Tất cả lịch hẹn (@appointments.Count)</h3></div>
-    <div class="admin-table-wrap">
+    <div class="admin-card-header">
+        <div class="admin-card-title">Danh sách bác sĩ (@doctors.Count)</div>
+    </div>
+
+    <div class="table-wrap">
         <table class="admin-table">
             <thead>
-                <tr><th>#</th><th>Bệnh nhân</th><th>SDT</th><th>Chuyên khoa</th><th>Bác sĩ</th><th>Ngày</th><th>Giờ</th><th>Ghi chú</th><th>Trạng thái</th><th>Hàng chờ</th></tr>
+                <tr>
+                    <th>#</th>
+                    <th>Họ và tên</th>
+                    <th>Chuyên khoa</th>
+                    <th>Bằng cấp</th>
+                    <th>Kinh nghiệm</th>
+                    <th>Đánh giá</th>
+                    <th>Lượt đánh giá</th>
+                </tr>
             </thead>
             <tbody>
-                @if (!appointments.Any())
-                {
-                    <tr><td colspan="10" style="text-align:center;padding:40px;color:var(--gray)">Chưa có lịch hẹn nào</td></tr>
-                }
-                @foreach (var a in appointments)
+                @if (!doctors.Any())
                 {
                     <tr>
-                        <td style="color:var(--gray);font-size:13px">@a.Id</td>
-                        <td><strong>@a.PatientName</strong></td>
-                        <td style="color:var(--gray)">@a.Phone</td>
-                        <td>@a.Specialty</td>
-                        <td style="color:var(--gray)">@(a.DoctorName ?? "-")</td>
-                        <td>@a.AppointmentDate.ToString("dd/MM/yyyy")</td>
-                        <td>@a.AppointmentTime</td>
-                        <td style="color:var(--gray);font-size:13px;max-width:140px">@(a.Note ?? "-")</td>
-                        <td>
-                            @if (a.Status == "Da xac nhan" || a.Status == "Đã xác nhận")
-                            { <span class="badge-confirmed">Đã xác nhận</span> }
-                            else if (a.Status == "Da huy" || a.Status == "Đã huỷ")
-                            { <span class="badge-cancelled">Đã hủy</span> }
-                            else
-                            { <span class="badge-waiting">@a.Status</span> }
+                        <td colspan="7" style="text-align:center;padding:2rem;
+                            color:rgba(255,255,255,.3)">
+                            Chưa có bác sĩ nào
+                        </td>
+                    </tr>
+                }
+                @foreach (var d in doctors)
+                {
+                    <tr>
+                        <td style="color:rgba(255,255,255,.3);font-size:.75rem">
+                            @d.Id
                         </td>
                         <td>
-                            @if (a.Status != "Da xac nhan" && a.Status != "Da huy" && a.Status != "Đã xác nhận" && a.Status != "Đã huỷ")
-                            {
-                                <a asp-action="ConfirmAppointment" asp-route-id="@a.Id" class="btn-action btn-confirm">&#10003;</a>
-                                <a asp-action="CancelAppointment"  asp-route-id="@a.Id" class="btn-action btn-cancel" onclick="return confirm('Hủy lịch hẹn này?')">&#10005;</a>
-                            }
+                            <div style="display:flex;align-items:center;gap:.75rem">
+                                <div style="width:36px;height:36px;border-radius:50%;
+                                            background:@d.AvatarBg;color:@d.AvatarFg;
+                                            display:flex;align-items:center;
+                                            justify-content:center;font-size:.85rem;
+                                            font-weight:700;flex-shrink:0">
+                                    @d.Initials
+                                </div>
+                                <span style="color:#fff;font-weight:500">@d.Name</span>
+                            </div>
                         </td>
+                        <td>
+                            <span style="background:@d.AvatarBg;color:@d.AvatarFg;
+                                         padding:3px 10px;border-radius:9999px;
+                                         font-size:.7rem;font-weight:700">
+                                @d.Specialty
+                            </span>
+                        </td>
+                        <td style="color:rgba(255,255,255,.6)">@d.Degree</td>
+                        <td style="color:rgba(255,255,255,.6)">@d.Experience năm</td>
+                        <td style="color:#F59E0B">&#9733; @d.Rating</td>
+                        <td style="color:rgba(255,255,255,.6)">@d.ReviewCount</td>
                     </tr>
                 }
             </tbody>
